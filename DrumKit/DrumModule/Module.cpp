@@ -9,6 +9,7 @@
 #include "Module.h"
 
 #include "../../IO/SpiDevices/SpiDevFactory.h"
+#include "../../IO/I2CBus.h"
 #include "../../Util/ErrorHandling.h"
 #include "../../Util/Threading.h"
 
@@ -484,6 +485,9 @@ namespace DrumKit
 						continue;
 					}
 
+					// Send noteOn to i2c
+					send_midi_i2c(0, message->channel, message->param1, message->param2);
+
 					const auto instruments = kits[kitId].GetInstruments();
 
 					for(const auto& instrument : instruments)
@@ -509,6 +513,8 @@ namespace DrumKit
 							mixer->PlaySound(*instrumentSoundId, volume);
 						}
 					}
+					// Send noteOff to i2c
+					send_midi_i2c(1, message->channel, message->param1, message->param2);
 				}
 			}
 		}
