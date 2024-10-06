@@ -6,11 +6,11 @@ I only wanted to be able to send note on and note off data from eXadrums to USB 
 
 The device is connected to my Raspberry Pi 3B as follows:
 
-Function    Pi        Arduino
-+5V supp     2           NC
-SDA          3           2
-SCL          5           3
-GND          9           GND
+|Function|Pi|Arduino
+|+5V supp|2 |NC
+|SDA|3|2
+|SCL|5|3
+|GND|9|GND
 
 Note that the Pi is able to supply 5V to power the Arduino, but DO NOT do this if the Arduino is also connected via USB to your PC as intended.
 
