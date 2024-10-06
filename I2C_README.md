@@ -27,4 +27,11 @@ Using a small test program and MidiView, I was able to see messages coming in vi
 
 See DS1_2024.ino for the source code to upload to your Arduino Micro.
 
+## Status
+
+I was able to map the pads in Superior Drummer although the velocity was extremely low.
+
+Quick fix: Multiply velo (volume) by 100.
+
+Concept is relatively proven now, just waiting on my trigger board :)
 
