@@ -27,6 +27,33 @@ Using a small test program and MidiView, I was able to see messages coming in vi
 
 See DS1_2024.ino for the source code to upload to your Arduino Micro.
 
+## I2C test
+
+See i2ctest.cpp for a small test program.
+This will send one note on and one note off to your Arduino so you can verify operation.
+
+Compile with
+```
+g++ i2ctest.cpp -o i2ctest
+```
+
+You should also run the following to detect your Arduino:
+```
+pi@pi:~/libeXaDrums $ i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         08 -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+
+```
+
+Note the addres 08, which is how the code is written for the Arduino.  We currently also hard code that into libeXadrums, but this will likely change.
+
 ## Status
 
 I was able to map the pads in Superior Drummer although the velocity was extremely low.
