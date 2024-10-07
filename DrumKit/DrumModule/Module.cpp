@@ -10,6 +10,7 @@
 
 #include "../../IO/MIDIFactory.h"
 #include "../../IO/SpiDevices/SpiDevFactory.h"
+#include "../../IO/I2CBus.h"
 #include "../../Util/ErrorHandling.h"
 #include "../../Util/Threading.h"
 
@@ -456,7 +457,8 @@ namespace DrumKit
 		}
 
 
-		if(sensorsConfig.sensorType.contains("Midi"))
+		if(sensorsConfig.sensorType.find("Midi") != std::string::npos)
+//		if(sensorsConfig.sensorType.contains("Midi"))
 		{
 
 			auto midi = IO::MIDIFactory::Make(sensorsConfig.sensorType);
@@ -491,6 +493,9 @@ namespace DrumKit
 
 						if(instrumentSoundId)
 						{
+							// Send noteOn to i2c
+							send_midi_i2c(0, message->channel, message->param1, message->param2 * 100);
+
 							// std::cout << *instrumentSoundId << std::endl;
 							const auto volume = static_cast<float>(message->param2) / 127.F;
 
@@ -506,6 +511,12 @@ namespace DrumKit
 								recorder.Push(TrigSound{instrument->GetId(), instrumentSoundId.value(), t, volume});
 							}
 							mixer->PlaySound(*instrumentSoundId, volume);
+
+							// Send noteOff to i2c
+							if (lastTrigTime > t)
+							{
+								send_midi_i2c(1, message->channel, instrumentSoundId.value(), message->param2);
+							}
 						}
 					}
 				}
@@ -547,12 +558,18 @@ namespace DrumKit
 						float volume = 1.0f;
 						instrumentPtr->GetSoundProps(soundId, volume);
 
+						// Send noteOn to i2c
+						send_midi_i2c(0, 10, soundId, volume * 100); // This one for buttons
+
 						if(recorder.IsRecording(std::memory_order_relaxed))
 						{
 							recorder.Push(TrigSound{instrumentPtr->GetId(), soundId, trigTime, volume});
 						}
 
 						mixer->PlaySound(soundId, volume);
+
+						// Send noteOff to i2c
+						send_midi_i2c(1, 10, soundId, volume);
 					}
 				}
 			}	

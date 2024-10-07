@@ -80,6 +80,7 @@ libexadrums_la_SOURCES = \
   DrumKit/Triggers/Triggers/Trigger.h \
   IO/HddSensor.cpp \
   IO/HddSensor.h \
+  IO/I2CBus.h \
   IO/ISensor.h \
   IO/MIDI.h \
   IO/MIDIFactory.h \
