@@ -4,6 +4,8 @@ My goal here was to work with an Arduino Micro, which has some native USB serial
 
 I only wanted to be able to send note on and note off data from eXadrums to USB Midi, so this is one-way.
 
+There are tons of these out there, but [here](https://www.amazon.com/dp/B00AFY2S56) is the one I used.
+
 ## Connections
 
 The device is connected to my Raspberry Pi 3B as follows:
