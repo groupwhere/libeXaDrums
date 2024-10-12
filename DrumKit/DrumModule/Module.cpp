@@ -475,10 +475,10 @@ namespace DrumKit
 
 					// TODO: add control change
 
-					// std::cout 	<< "Command: " << std::hex << +message->command << ", " << std::dec
-					// 			<< "Channel: " << +message->channel << ", "
-					// 			<< "Param 1: " << +message->param1 << ", "
-					// 			<< "Param 2: " << +message->param2 << std::endl;
+					//std::cout 	<< "Command: " << std::hex << +message->command << ", " << std::dec
+					//			<< "Channel: " << +message->channel << ", "
+					//			<< "Param 1: " << +message->param1 << ", "
+					//			<< "Param 2: " << +message->param2 << std::endl;
 
 					if(message->command != 0x90 && message->command != 0xB0)
 					{
@@ -493,11 +493,11 @@ namespace DrumKit
 
 						if(instrumentSoundId)
 						{
-							// Send noteOn to i2c
-							send_midi_i2c(0, message->channel, message->param1, message->param2 * 100);
-
 							// std::cout << *instrumentSoundId << std::endl;
 							const auto volume = static_cast<float>(message->param2) / 127.F;
+
+							// Send noteOn to i2c
+							send_midi_i2c(0, message->channel, message->param1, volume);
 
 							lastTrigValue.store(volume * 100.F, std::memory_order_release);
 
@@ -515,7 +515,7 @@ namespace DrumKit
 							// Send noteOff to i2c
 							if (lastTrigTime > t)
 							{
-								send_midi_i2c(1, message->channel, instrumentSoundId.value(), message->param2);
+								send_midi_i2c(1, message->channel, message->param1, volume);
 							}
 						}
 					}
@@ -559,7 +559,7 @@ namespace DrumKit
 						instrumentPtr->GetSoundProps(soundId, volume);
 
 						// Send noteOn to i2c
-						send_midi_i2c(0, 10, soundId, volume * 100); // This one for buttons
+						send_midi_i2c(0, 10, soundId, 100); // This one for buttons
 
 						if(recorder.IsRecording(std::memory_order_relaxed))
 						{
@@ -569,7 +569,7 @@ namespace DrumKit
 						mixer->PlaySound(soundId, volume);
 
 						// Send noteOff to i2c
-						send_midi_i2c(1, 10, soundId, volume);
+						send_midi_i2c(1, 10, soundId, 100);
 					}
 				}
 			}	
